@@ -2,11 +2,47 @@
 const course = useCourse();
 const route = useRoute();
 
+definePageMeta({
+  validate({ params }) {
+    const course = useCourse();
+
+    const chapter = course.chapters.find(
+      (chapter) => chapter.slug === params.chapterSlug
+    );
+
+    if (!chapter) {
+      return createError({
+        statusCode: 404,
+        message: 'Chapter not found',
+      });
+    }
+
+    const lesson = chapter.lessons.find(
+      (lesson) => lesson.slug === params.lessonSlug
+    );
+
+    if (!lesson) {
+      return createError({
+        statusCode: 404,
+        message: 'Lesson not found',
+      });
+    }
+    return true;
+  },
+});
+
+if (route.params.lessonSlug === '3-typing-component-events') {
+  console.log(
+    route.params.paramthatdoesnotexistwhoops.capitializeIsNotAMethod()
+  );
+}
+
 const chapter = computed(() => {
   return course.chapters.find(
     (chapter) => chapter.slug === route.params.chapterSlug
   );
 });
+
 const lesson = computed(() => {
   return chapter.value.lessons.find(
     (lesson) => lesson.slug === route.params.lessonSlug
@@ -67,7 +103,7 @@ const toggleComplete = () => {
 
     <LessonCompleteButton
       :model-value="isLessonComplete"
-      @update:model-value="toggleComplete"
+      @update:model-value="throw createError('Could not update');"
     />
   </div>
 </template>
