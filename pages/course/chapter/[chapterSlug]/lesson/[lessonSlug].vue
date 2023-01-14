@@ -27,10 +27,12 @@ definePageMeta({
       );
 
       if (!lesson) {
-        return createError({
-          statusCode: 404,
-          message: 'Lesson not found',
-        });
+        return abortNavigation(
+          createError({
+            statusCode: 404,
+            message: 'Lesson not found',
+          })
+        );
       }
     },
     'auth',
