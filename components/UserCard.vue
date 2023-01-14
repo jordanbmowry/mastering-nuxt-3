@@ -24,6 +24,18 @@ const logout = async () => {
     console.error(error);
     return;
   }
+
+  try {
+    await $fetch(`/api/_supabase/session`, {
+      method: 'POST',
+      body: {
+        event: 'SIGNED_OUT',
+        session: null,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
   await navigateTo('/login');
 };
 
